@@ -22,12 +22,7 @@ const server = http.createServer(app)
 
 // global.io = io
 
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-})
+mongoose.connect(MONGODB_URI)
 mongoose.Promise = global.Promise
 
 let db = mongoose.connection
