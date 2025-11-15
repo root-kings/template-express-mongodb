@@ -1,13 +1,10 @@
 const Joi = require('joi')
-
-// Define password validation rules
-// Minimum 8 characters, at least 1 uppercase, 1 lowercase, 1 number, 1 special char
 const passwordSchema = Joi.string()
   .min(8)
-  .pattern(/[A-Z]/) // At least one uppercase
-  .pattern(/[a-z]/) // At least one lowercase
-  .pattern(/[0-9]/) // At least one digit
-  .pattern(/[!@#$%^&*]/) // At least one special character
+  .pattern(/[A-Z]/)
+  .pattern(/[a-z]/)
+  .pattern(/[0-9]/)
+  .pattern(/[!@#$%^&*]/)
   .required()
   .messages({
     'string.min': 'Password must be at least 8 characters long',

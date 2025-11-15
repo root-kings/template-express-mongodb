@@ -42,7 +42,6 @@ exports.details_get = (req, res) => {
 }
 
 exports.create_post = (req, res) => {
-  // Validation is handled by middleware, req.body is already validated
   const { name, email, password, type, phone } = req.body
 
   const saltRounds = 10
@@ -60,7 +59,6 @@ exports.create_post = (req, res) => {
       return newUser.save()
     })
     .then(doc => {
-      // Do not send password back
       const obj = doc.toObject()
       delete obj.password
       return res.send(obj)

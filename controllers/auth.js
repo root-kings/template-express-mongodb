@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 const User = require('../models/user').model
 
 exports.login_post = async (req, res) => {
-  // Validation is handled by middleware, req.body is already validated
   const { email, password, type } = req.body
 
   try {
@@ -20,11 +19,9 @@ exports.login_post = async (req, res) => {
       return res.status(401).send({ status: false })
     }
 
-    // Remove password before embedding in token/user response
     const safeUser = Object.assign({}, user)
     delete safeUser.password
 
-    // Create a token
     const payload = { user: safeUser }
     const options = {
       expiresIn: process.env.JWT_EXPIRES,
