@@ -1,6 +1,7 @@
 const router = require('express').Router()
 
 const validateToken = require('../middlewares/validateToken')
+const { validate, loginSchema } = require('../utils/validators')
 
 const authController = require('../controllers/auth')
 
@@ -8,7 +9,7 @@ const authController = require('../controllers/auth')
 
 router.get('/login/status', validateToken, authController.login_status_get)
 
-router.post('/login', authController.login_post)
+router.post('/login', validate(loginSchema), authController.login_post)
 
 router.get('/', (req, res) => {
   res.send('Please read documentation for the API. (auth)')
