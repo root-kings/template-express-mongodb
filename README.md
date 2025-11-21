@@ -52,7 +52,7 @@ GET /api/users - List Users (requires token)
 
 ```bash
 # Clone the repository
-git clone https://github.com/root-kings/template-express-mongodb.git
+git clone https://github.com/sanjana2505006/template-express-mongodb.git
 
 # Navigate to directory
 cd template-express-mongodb
