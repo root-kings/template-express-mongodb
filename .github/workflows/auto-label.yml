@@ -1,0 +1,132 @@
+name: Auto Label Issues
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    
+    steps:
+      - name: Label Bug Reports
+        if: contains(github.event.issue.body, '[BUG]') || contains(github.event.issue.title, '[BUG]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['bug']
+            })
+
+      - name: Label Feature Requests
+        if: contains(github.event.issue.body, '[FEATURE]') || contains(github.event.issue.title, '[FEATURE]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['enhancement']
+            })
+
+      - name: Label Security Issues
+        if: contains(github.event.issue.body, '[SECURITY]') || contains(github.event.issue.title, '[SECURITY]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['security', 'priority: high']
+            })
+
+      - name: Label API Endpoint Requests
+        if: contains(github.event.issue.body, '[API]') || contains(github.event.issue.title, '[API]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['api', 'enhancement']
+            })
+
+      - name: Label Documentation Issues
+        if: contains(github.event.issue.body, '[DOCS]') || contains(github.event.issue.title, '[DOCS]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['documentation']
+            })
+
+      - name: Label Refactoring Issues
+        if: contains(github.event.issue.body, '[REFACTOR]') || contains(github.event.issue.title, '[REFACTOR]')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['refactor']
+            })
+
+      - name: Label Auth Component
+        if: contains(github.event.issue.body, 'controllers/auth') || contains(github.event.issue.body, 'routes/auth')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['component: auth']
+            })
+
+      - name: Label User Component
+        if: contains(github.event.issue.body, 'controllers/user') || contains(github.event.issue.body, 'routes/user')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['component: user']
+            })
+
+      - name: Label Middleware Component
+        if: contains(github.event.issue.body, 'middlewares/')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['component: middleware']
+            })
+
+      - name: Label Database Component
+        if: contains(github.event.issue.body, 'models/') || contains(github.event.issue.body, 'MongoDB') || contains(github.event.issue.body, 'Mongoose')
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['component: database']
+            })
