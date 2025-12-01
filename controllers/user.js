@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const User = require('../models/user').model
 
 exports.list_get = (req, res) => {
@@ -43,20 +44,41 @@ exports.details_get = (req, res) => {
 exports.create_post = (req, res) => {
   const { name, email, password, type } = req.body
 
-  let newUser = new User({
-    name,
-    email,
-    password,
-    type
-  })
+  const saltRounds = 10
+  bcrypt
+    .hash(password, saltRounds)
+    .then(hashedPassword => {
+      let newUser = new User({
+        name,
+        email,
+        password: hashedPassword,
+        type
+      })
 
-  newUser
-    .save()
+      return newUser.save()
+    })
     .then(doc => {
-      return res.send(doc)
+      const obj = doc.toObject()
+      delete obj.password
+      return res.send(obj)
     })
     .catch(err => {
       console.error({ err })
+
+      // Handle duplicate key errors (e.g. duplicate email)
+      // MongoDB duplicate error code is 11000
+      if (
+        err &&
+        (err.code === 11000 ||
+          err.code === '11000' ||
+          err.codeName === 'DuplicateKey')
+      ) {
+        const key = (err.keyValue && Object.keys(err.keyValue)[0]) || 'email'
+        return res
+          .status(400)
+          .send({ status: false, message: `${key} already in use` })
+      }
+
       return res.status(500).send({ err })
     })
 }
