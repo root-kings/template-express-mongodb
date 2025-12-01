@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Community Discussions
+    url: https://github.com/root-kings/template-express-mongodb/discussions
+    about: Ask questions and discuss with the community
+  - name: Documentation
+    url: https://github.com/root-kings/template-express-mongodb/blob/main/README.md
+    about: Read the project documentation
+  - name: Security Issues
+    url: https://github.com/root-kings/template-express-mongodb/security
+    about: Report security vulnerabilities privately
