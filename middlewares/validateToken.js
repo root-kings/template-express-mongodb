@@ -2,32 +2,48 @@ const jwt = require('jsonwebtoken')
 
 const validateToken = (req, res, next) => {
   const authorizationHeader = req.headers.authorization
-  let result
-  if (authorizationHeader) {
-    const token = req.headers.authorization.split(' ')[1] // Bearer <token>
-    const options = {
-      expiresIn: process.env.JWT_EXPIRES,
-      issuer: process.env.JWT_ISSUER
-    }
-    const secret = process.env.JWT_SECRET
-    try {
-      // verify makes sure that the token hasn't expired and has been issued by us
-      result = jwt.verify(token, secret, options)
 
-      // Let's pass back the decoded token to the request object
-      req.decoded = result
-      // We call next to pass execution to the subsequent middleware
-      next()
-    } catch (err) {
-      // Throw an error just in case anything goes wrong with verification
-      throw new Error(err)
-    }
-  } else {
-    result = {
-      error: `Authentication error. Token required.`,
+  // No Authorization header
+  if (!authorizationHeader) {
+    return res.status(401).json({
+      error: 'Authentication error. Token required.',
       status: 401
-    }
-    res.status(401).send(result)
+    })
+  }
+
+  // Expected format: "Bearer <token>"
+  const parts = authorizationHeader.split(' ')
+  if (parts.length !== 2 || parts[0] !== 'Bearer') {
+    return res.status(401).json({
+      error: 'Malformed authorization header. Expected: Bearer <token>',
+      status: 401
+    })
+  }
+
+  const token = parts[1]
+  const secret = process.env.JWT_SECRET
+
+  try {
+    // Verify token — DO NOT pass expiresIn here
+    const decoded = jwt.verify(token, secret, {
+      issuer: process.env.JWT_ISSUER
+    })
+
+    req.decoded = decoded
+    return next()
+
+  } catch (err) {
+    // Handle typical JWT errors cleanly
+    let message = 'Authentication error.'
+    if (err.name === 'TokenExpiredError') message = 'Token expired.'
+    if (err.name === 'JsonWebTokenError') message = 'Invalid token.'
+    if (err.name === 'NotBeforeError') message = 'Token not active yet.'
+
+    return res.status(401).json({
+      error: message,
+      details: err.message,
+      status: 401
+    })
   }
 }
 
