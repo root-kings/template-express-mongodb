@@ -2,7 +2,7 @@ const fs = require('fs')
 
 const unlinkSync = filepath => {
   try {
-    if (typeof filepath == 'string') unlinkForReal(filepath)
+    if (typeof filepath === 'string') unlinkForReal(filepath)
     else filepath.forEach(unlinkForReal)
     return filepath
   } catch (err) {
@@ -11,7 +11,7 @@ const unlinkSync = filepath => {
 }
 
 const unlinkForReal = file => {
-  // console.log(file, fs.existsSync(file))
+
   if (fs.existsSync(file)) fs.unlinkSync(file)
 }
 

@@ -14,7 +14,7 @@ const MONGODB_URI = process.env.MONGODB_URI
 // const UPLOADS_DIR = process.env.UPLOADS_DIR
 // const PUBLIC_DIR = path.join(__dirname, process.env.PUBLIC_DIR)
 
-let app = express()
+const app = express()
 
 const server = http.createServer(app)
 
@@ -22,15 +22,10 @@ const server = http.createServer(app)
 
 // global.io = io
 
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-})
+mongoose.connect(MONGODB_URI)
 mongoose.Promise = global.Promise
 
-let db = mongoose.connection
+const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 if (process.env.NODE_ENV === 'development') {
@@ -93,5 +88,5 @@ app.use('/', require('./routes'))
 
 server.listen(PORT, err => {
   if (err) throw err
-  console.info('Listening on port ' + PORT + '...')
+  console.info(`Listening on port ${PORT}...`)
 })
