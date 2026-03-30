@@ -2,7 +2,7 @@
 
 Backend template for Root Kings Express Applications
 
-## Required `env` variables
+## Required `environment` variables
 
 1. `PORT`
 2. `MONGODB_URI`
