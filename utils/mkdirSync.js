@@ -6,7 +6,7 @@ const mkdirSync = dirpath => {
   // console.log(typeof dirpath)
 
   try {
-    if (typeof dirpath == 'string') makedirForReal(dirpath)
+    if (typeof dirpath === 'string') makedirForReal(dirpath)
     else dirpath.forEach(makedirForReal)
     return dirpath
   } catch (err) {
